@@ -1,15 +1,15 @@
 const {MongoClient} = require('mongodb');
-const uri = "mongodb+srv://dbUser:<Grk@2018>@cluster0.f8ujp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-const client = new MongoClient(uri);
+const uri = "mongodb+srv://dbUser:PASSWORD@cluster0.f8ujp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-async function db(params) {
+async function db() {
     try {
         await client.connect();
     
         await listDatabases(client);
-     
+        return "done"
     } catch (e) {
-        console.error(e);
+        return e
     } finally {
         await client.close();
     }
@@ -21,3 +21,7 @@ async function listDatabases(client){
     console.log("Databases:");
     databasesList.databases.forEach(db => console.log(` - ${db.name}`));
 };
+
+db()
+.then(data => console.log(data))
+.catch(err => console.log(err))

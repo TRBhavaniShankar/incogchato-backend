@@ -1,11 +1,23 @@
+const { exception } = require("console");
 const { Mongoose } = require("mongoose");
-
+require('dotenv').config({path: __dirname + '/.env'})
 const mongoose = require('mongoose')
-const uri = "mongodb+srv://dbUser:qMca3pI6E3y8rn8R@cluster0.f8ujp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+
 const connectDB = async() => {
-    await mongoose.connect(uri)
-    console.log("connected successfully..")
+    try {
+        await mongoose.connect(process.env.db)
+        const db = mongoose.connection;
+        
+        db.on("error", console.error.bind(console, "connection error: "));
+        db.once("open", function () {
+            console.log("Successfully connected to database..")
+        });
+        return db
+
+    } catch (error) {
+        console.log(error)
+        return error.message
+    }
 }
-connectDB()
-.catch(err => console.log(err))
+
 module.exports = connectDB

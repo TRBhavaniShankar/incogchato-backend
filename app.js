@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Router = require("./routes")
 require('dotenv').config({path: __dirname + '/.env'})
-
+global.writer = null
 const app = express();
 
 app.use(express.json());
